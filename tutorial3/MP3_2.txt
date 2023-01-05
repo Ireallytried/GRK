@@ -1,0 +1,59 @@
+<style> body { background-color:#ccc; } </style>
+<script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/p5.js"></script>
+<script type="text/javascript">
+function setup() {
+	pixelDensity(1);
+    createCanvas(512,512);
+    background(255);
+}
+var x0=-1;
+var y0=-1;
+var x1=-1;
+var y1=-1;//start end coordinates
+function mousePressed() { //save inital coordinates
+    x0=mouseX;
+    y0=mouseY;
+}
+function mouseDragged() {  //draw 2 circles
+    x1=mouseX;
+    y1=mouseY;  
+    background(255);
+    noStroke();
+    fill('red');
+    ellipse(x0-3,y0-3,6);
+    fill('green');  
+    ellipse(x1-3,y1-3,6);
+}
+function mouseReleased() { //erase screen
+  background(255);
+  loadPixels();
+  draw_line();
+  updatePixels();
+}
+function set_pixel(x,y,c) { //paint pixels
+    idx=(y*512+x)*4;
+    if (c < 0) {
+    pixels[idx] = -c; //r
+    pixels[idx + 1] = 0;//g
+    pixels[idx + 2] = 0;//b
+    } else if (c > 0) {
+     pixels[idx] = 0; //r
+     pixels[idx + 1] = c;//g
+     pixels[idx + 2] = 0;//b
+     }
+}
+function draw_line() {  
+	dx=x1-x0;
+    dy=y1-y0;
+    a=dy/dx;
+    b=y0-a*x0;
+    for ( x = 0; x < width; x++) {
+    	for (y = 0; y < height; y++) {
+        dxy=dy/dx*(x-x0)-(y-y0)
+        set_pixel(x,y,dxy);
+    	}
+    }
+    updatePixels();
+}
+    
+</script>
